@@ -30,8 +30,19 @@ namespace FProject
 		
     #region Extensibility Method Definitions
     partial void OnCreated();
+    partial void InsertRItemsGroup(RItemsGroup instance);
+    partial void UpdateRItemsGroup(RItemsGroup instance);
+    partial void DeleteRItemsGroup(RItemsGroup instance);
+    partial void InsertTProperty(TProperty instance);
+    partial void UpdateTProperty(TProperty instance);
+    partial void DeleteTProperty(TProperty instance);
+    partial void InsertRParentProperty(RParentProperty instance);
+    partial void UpdateRParentProperty(RParentProperty instance);
+    partial void DeleteRParentProperty(RParentProperty instance);
+    partial void InsertTGroup(TGroup instance);
+    partial void UpdateTGroup(TGroup instance);
+    partial void DeleteTGroup(TGroup instance);
     partial void UpdateTItem(TItem instance);
-    partial void DeleteTItem(TItem instance);
     #endregion
 		
 		public DataClasses1DataContext() : 
@@ -64,6 +75,38 @@ namespace FProject
 			OnCreated();
 		}
 		
+		public System.Data.Linq.Table<RItemsGroup> RItemsGroups
+		{
+			get
+			{
+				return this.GetTable<RItemsGroup>();
+			}
+		}
+		
+		public System.Data.Linq.Table<TProperty> TProperties
+		{
+			get
+			{
+				return this.GetTable<TProperty>();
+			}
+		}
+		
+		public System.Data.Linq.Table<RParentProperty> RParentProperties
+		{
+			get
+			{
+				return this.GetTable<RParentProperty>();
+			}
+		}
+		
+		public System.Data.Linq.Table<TGroup> TGroups
+		{
+			get
+			{
+				return this.GetTable<TGroup>();
+			}
+		}
+		
 		public System.Data.Linq.Table<TItem> TItems
 		{
 			get
@@ -77,11 +120,748 @@ namespace FProject
 			this.TItemsInsert(obj.name);
 		}
 		
+		private void DeleteTItem(TItem obj)
+		{
+			this.TItemsDelete(((System.Nullable<System.Guid>)(obj.id)));
+		}
+		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.TItemsInsert")]
-		public int TItemsInsert([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(50)")] string name)
+		public int TItemsInsert([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="NVarChar(50)")] string name)
 		{
 			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), name);
 			return ((int)(result.ReturnValue));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.TItemsDelete")]
+		public int TItemsDelete([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="UniqueIdentifier")] System.Nullable<System.Guid> id)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), id);
+			return ((int)(result.ReturnValue));
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.RItemsGroups")]
+	public partial class RItemsGroup : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private System.Guid _id;
+		
+		private System.Guid _Item_id;
+		
+		private System.Guid _Group_id;
+		
+		private EntityRef<TGroup> _TGroup;
+		
+		private EntityRef<TItem> _TItem;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnidChanging(System.Guid value);
+    partial void OnidChanged();
+    partial void OnItem_idChanging(System.Guid value);
+    partial void OnItem_idChanged();
+    partial void OnGroup_idChanging(System.Guid value);
+    partial void OnGroup_idChanged();
+    #endregion
+		
+		public RItemsGroup()
+		{
+			this._TGroup = default(EntityRef<TGroup>);
+			this._TItem = default(EntityRef<TItem>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
+		public System.Guid id
+		{
+			get
+			{
+				return this._id;
+			}
+			set
+			{
+				if ((this._id != value))
+				{
+					this.OnidChanging(value);
+					this.SendPropertyChanging();
+					this._id = value;
+					this.SendPropertyChanged("id");
+					this.OnidChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Item_id", DbType="UniqueIdentifier NOT NULL")]
+		public System.Guid Item_id
+		{
+			get
+			{
+				return this._Item_id;
+			}
+			set
+			{
+				if ((this._Item_id != value))
+				{
+					if (this._TItem.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnItem_idChanging(value);
+					this.SendPropertyChanging();
+					this._Item_id = value;
+					this.SendPropertyChanged("Item_id");
+					this.OnItem_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Group_id", DbType="UniqueIdentifier NOT NULL")]
+		public System.Guid Group_id
+		{
+			get
+			{
+				return this._Group_id;
+			}
+			set
+			{
+				if ((this._Group_id != value))
+				{
+					if (this._TGroup.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnGroup_idChanging(value);
+					this.SendPropertyChanging();
+					this._Group_id = value;
+					this.SendPropertyChanged("Group_id");
+					this.OnGroup_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="TGroup_RItemsGroup", Storage="_TGroup", ThisKey="Group_id", OtherKey="id", IsForeignKey=true)]
+		public TGroup TGroup
+		{
+			get
+			{
+				return this._TGroup.Entity;
+			}
+			set
+			{
+				TGroup previousValue = this._TGroup.Entity;
+				if (((previousValue != value) 
+							|| (this._TGroup.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._TGroup.Entity = null;
+						previousValue.RItemsGroups.Remove(this);
+					}
+					this._TGroup.Entity = value;
+					if ((value != null))
+					{
+						value.RItemsGroups.Add(this);
+						this._Group_id = value.id;
+					}
+					else
+					{
+						this._Group_id = default(System.Guid);
+					}
+					this.SendPropertyChanged("TGroup");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="TItem_RItemsGroup", Storage="_TItem", ThisKey="Item_id", OtherKey="id", IsForeignKey=true)]
+		public TItem TItem
+		{
+			get
+			{
+				return this._TItem.Entity;
+			}
+			set
+			{
+				TItem previousValue = this._TItem.Entity;
+				if (((previousValue != value) 
+							|| (this._TItem.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._TItem.Entity = null;
+						previousValue.RItemsGroups.Remove(this);
+					}
+					this._TItem.Entity = value;
+					if ((value != null))
+					{
+						value.RItemsGroups.Add(this);
+						this._Item_id = value.id;
+					}
+					else
+					{
+						this._Item_id = default(System.Guid);
+					}
+					this.SendPropertyChanged("TItem");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.TProperties")]
+	public partial class TProperty : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private System.Guid _id;
+		
+		private string _name;
+		
+		private EntitySet<RParentProperty> _RParentProperties;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnidChanging(System.Guid value);
+    partial void OnidChanged();
+    partial void OnnameChanging(string value);
+    partial void OnnameChanged();
+    #endregion
+		
+		public TProperty()
+		{
+			this._RParentProperties = new EntitySet<RParentProperty>(new Action<RParentProperty>(this.attach_RParentProperties), new Action<RParentProperty>(this.detach_RParentProperties));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
+		public System.Guid id
+		{
+			get
+			{
+				return this._id;
+			}
+			set
+			{
+				if ((this._id != value))
+				{
+					this.OnidChanging(value);
+					this.SendPropertyChanging();
+					this._id = value;
+					this.SendPropertyChanged("id");
+					this.OnidChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_name", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string name
+		{
+			get
+			{
+				return this._name;
+			}
+			set
+			{
+				if ((this._name != value))
+				{
+					this.OnnameChanging(value);
+					this.SendPropertyChanging();
+					this._name = value;
+					this.SendPropertyChanged("name");
+					this.OnnameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="TProperty_RParentProperty", Storage="_RParentProperties", ThisKey="id", OtherKey="Proper_id")]
+		public EntitySet<RParentProperty> RParentProperties
+		{
+			get
+			{
+				return this._RParentProperties;
+			}
+			set
+			{
+				this._RParentProperties.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_RParentProperties(RParentProperty entity)
+		{
+			this.SendPropertyChanging();
+			entity.TProperty = this;
+		}
+		
+		private void detach_RParentProperties(RParentProperty entity)
+		{
+			this.SendPropertyChanging();
+			entity.TProperty = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.RParentProperties")]
+	public partial class RParentProperty : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private System.Guid _id;
+		
+		private System.Guid _Parent_id;
+		
+		private System.Guid _Proper_id;
+		
+		private string _val;
+		
+		private EntityRef<TProperty> _TProperty;
+		
+		private EntityRef<TGroup> _TGroup;
+		
+		private EntityRef<TItem> _TItem;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnidChanging(System.Guid value);
+    partial void OnidChanged();
+    partial void OnParent_idChanging(System.Guid value);
+    partial void OnParent_idChanged();
+    partial void OnProper_idChanging(System.Guid value);
+    partial void OnProper_idChanged();
+    partial void OnvalChanging(string value);
+    partial void OnvalChanged();
+    #endregion
+		
+		public RParentProperty()
+		{
+			this._TProperty = default(EntityRef<TProperty>);
+			this._TGroup = default(EntityRef<TGroup>);
+			this._TItem = default(EntityRef<TItem>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
+		public System.Guid id
+		{
+			get
+			{
+				return this._id;
+			}
+			set
+			{
+				if ((this._id != value))
+				{
+					this.OnidChanging(value);
+					this.SendPropertyChanging();
+					this._id = value;
+					this.SendPropertyChanged("id");
+					this.OnidChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Parent_id", DbType="UniqueIdentifier NOT NULL")]
+		public System.Guid Parent_id
+		{
+			get
+			{
+				return this._Parent_id;
+			}
+			set
+			{
+				if ((this._Parent_id != value))
+				{
+					if ((this._TGroup.HasLoadedOrAssignedValue || this._TItem.HasLoadedOrAssignedValue))
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnParent_idChanging(value);
+					this.SendPropertyChanging();
+					this._Parent_id = value;
+					this.SendPropertyChanged("Parent_id");
+					this.OnParent_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Proper_id", DbType="UniqueIdentifier NOT NULL")]
+		public System.Guid Proper_id
+		{
+			get
+			{
+				return this._Proper_id;
+			}
+			set
+			{
+				if ((this._Proper_id != value))
+				{
+					if (this._TProperty.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnProper_idChanging(value);
+					this.SendPropertyChanging();
+					this._Proper_id = value;
+					this.SendPropertyChanged("Proper_id");
+					this.OnProper_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_val", DbType="NChar(10)")]
+		public string val
+		{
+			get
+			{
+				return this._val;
+			}
+			set
+			{
+				if ((this._val != value))
+				{
+					this.OnvalChanging(value);
+					this.SendPropertyChanging();
+					this._val = value;
+					this.SendPropertyChanged("val");
+					this.OnvalChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="TProperty_RParentProperty", Storage="_TProperty", ThisKey="Proper_id", OtherKey="id", IsForeignKey=true)]
+		public TProperty TProperty
+		{
+			get
+			{
+				return this._TProperty.Entity;
+			}
+			set
+			{
+				TProperty previousValue = this._TProperty.Entity;
+				if (((previousValue != value) 
+							|| (this._TProperty.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._TProperty.Entity = null;
+						previousValue.RParentProperties.Remove(this);
+					}
+					this._TProperty.Entity = value;
+					if ((value != null))
+					{
+						value.RParentProperties.Add(this);
+						this._Proper_id = value.id;
+					}
+					else
+					{
+						this._Proper_id = default(System.Guid);
+					}
+					this.SendPropertyChanged("TProperty");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="TGroup_RParentProperty", Storage="_TGroup", ThisKey="Parent_id", OtherKey="id", IsForeignKey=true)]
+		public TGroup TGroup
+		{
+			get
+			{
+				return this._TGroup.Entity;
+			}
+			set
+			{
+				TGroup previousValue = this._TGroup.Entity;
+				if (((previousValue != value) 
+							|| (this._TGroup.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._TGroup.Entity = null;
+						previousValue.RParentProperties.Remove(this);
+					}
+					this._TGroup.Entity = value;
+					if ((value != null))
+					{
+						value.RParentProperties.Add(this);
+						this._Parent_id = value.id;
+					}
+					else
+					{
+						this._Parent_id = default(System.Guid);
+					}
+					this.SendPropertyChanged("TGroup");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="TItem_RParentProperty", Storage="_TItem", ThisKey="Parent_id", OtherKey="id", IsForeignKey=true)]
+		public TItem TItem
+		{
+			get
+			{
+				return this._TItem.Entity;
+			}
+			set
+			{
+				TItem previousValue = this._TItem.Entity;
+				if (((previousValue != value) 
+							|| (this._TItem.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._TItem.Entity = null;
+						previousValue.RParentProperties.Remove(this);
+					}
+					this._TItem.Entity = value;
+					if ((value != null))
+					{
+						value.RParentProperties.Add(this);
+						this._Parent_id = value.id;
+					}
+					else
+					{
+						this._Parent_id = default(System.Guid);
+					}
+					this.SendPropertyChanged("TItem");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.TGroups")]
+	public partial class TGroup : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private System.Guid _id;
+		
+		private string _name;
+		
+		private System.Guid _parent_id;
+		
+		private EntitySet<RItemsGroup> _RItemsGroups;
+		
+		private EntitySet<RParentProperty> _RParentProperties;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnidChanging(System.Guid value);
+    partial void OnidChanged();
+    partial void OnnameChanging(string value);
+    partial void OnnameChanged();
+    partial void Onparent_idChanging(System.Guid value);
+    partial void Onparent_idChanged();
+    #endregion
+		
+		public TGroup()
+		{
+			this._RItemsGroups = new EntitySet<RItemsGroup>(new Action<RItemsGroup>(this.attach_RItemsGroups), new Action<RItemsGroup>(this.detach_RItemsGroups));
+			this._RParentProperties = new EntitySet<RParentProperty>(new Action<RParentProperty>(this.attach_RParentProperties), new Action<RParentProperty>(this.detach_RParentProperties));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
+		public System.Guid id
+		{
+			get
+			{
+				return this._id;
+			}
+			set
+			{
+				if ((this._id != value))
+				{
+					this.OnidChanging(value);
+					this.SendPropertyChanging();
+					this._id = value;
+					this.SendPropertyChanged("id");
+					this.OnidChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_name", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string name
+		{
+			get
+			{
+				return this._name;
+			}
+			set
+			{
+				if ((this._name != value))
+				{
+					this.OnnameChanging(value);
+					this.SendPropertyChanging();
+					this._name = value;
+					this.SendPropertyChanged("name");
+					this.OnnameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_parent_id", DbType="UniqueIdentifier NOT NULL")]
+		public System.Guid parent_id
+		{
+			get
+			{
+				return this._parent_id;
+			}
+			set
+			{
+				if ((this._parent_id != value))
+				{
+					this.Onparent_idChanging(value);
+					this.SendPropertyChanging();
+					this._parent_id = value;
+					this.SendPropertyChanged("parent_id");
+					this.Onparent_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="TGroup_RItemsGroup", Storage="_RItemsGroups", ThisKey="id", OtherKey="Group_id")]
+		public EntitySet<RItemsGroup> RItemsGroups
+		{
+			get
+			{
+				return this._RItemsGroups;
+			}
+			set
+			{
+				this._RItemsGroups.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="TGroup_RParentProperty", Storage="_RParentProperties", ThisKey="id", OtherKey="Parent_id")]
+		public EntitySet<RParentProperty> RParentProperties
+		{
+			get
+			{
+				return this._RParentProperties;
+			}
+			set
+			{
+				this._RParentProperties.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_RItemsGroups(RItemsGroup entity)
+		{
+			this.SendPropertyChanging();
+			entity.TGroup = this;
+		}
+		
+		private void detach_RItemsGroups(RItemsGroup entity)
+		{
+			this.SendPropertyChanging();
+			entity.TGroup = null;
+		}
+		
+		private void attach_RParentProperties(RParentProperty entity)
+		{
+			this.SendPropertyChanging();
+			entity.TGroup = this;
+		}
+		
+		private void detach_RParentProperties(RParentProperty entity)
+		{
+			this.SendPropertyChanging();
+			entity.TGroup = null;
 		}
 	}
 	
@@ -95,7 +875,13 @@ namespace FProject
 		
 		private string _name;
 		
+		private System.Guid _temp;
+		
 		private System.DateTime _dt;
+		
+		private EntitySet<RItemsGroup> _RItemsGroups;
+		
+		private EntitySet<RParentProperty> _RParentProperties;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -105,12 +891,16 @@ namespace FProject
     partial void OnidChanged();
     partial void OnnameChanging(string value);
     partial void OnnameChanged();
+    partial void OntempChanging(System.Guid value);
+    partial void OntempChanged();
     partial void OndtChanging(System.DateTime value);
     partial void OndtChanged();
     #endregion
 		
 		public TItem()
 		{
+			this._RItemsGroups = new EntitySet<RItemsGroup>(new Action<RItemsGroup>(this.attach_RItemsGroups), new Action<RItemsGroup>(this.detach_RItemsGroups));
+			this._RParentProperties = new EntitySet<RParentProperty>(new Action<RParentProperty>(this.attach_RParentProperties), new Action<RParentProperty>(this.detach_RParentProperties));
 			OnCreated();
 		}
 		
@@ -154,6 +944,26 @@ namespace FProject
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_temp", DbType="UniqueIdentifier NOT NULL")]
+		public System.Guid temp
+		{
+			get
+			{
+				return this._temp;
+			}
+			set
+			{
+				if ((this._temp != value))
+				{
+					this.OntempChanging(value);
+					this.SendPropertyChanging();
+					this._temp = value;
+					this.SendPropertyChanged("temp");
+					this.OntempChanged();
+				}
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_dt", DbType="DateTime NOT NULL")]
 		public System.DateTime dt
 		{
@@ -171,6 +981,32 @@ namespace FProject
 					this.SendPropertyChanged("dt");
 					this.OndtChanged();
 				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="TItem_RItemsGroup", Storage="_RItemsGroups", ThisKey="id", OtherKey="Item_id")]
+		public EntitySet<RItemsGroup> RItemsGroups
+		{
+			get
+			{
+				return this._RItemsGroups;
+			}
+			set
+			{
+				this._RItemsGroups.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="TItem_RParentProperty", Storage="_RParentProperties", ThisKey="id", OtherKey="Parent_id")]
+		public EntitySet<RParentProperty> RParentProperties
+		{
+			get
+			{
+				return this._RParentProperties;
+			}
+			set
+			{
+				this._RParentProperties.Assign(value);
 			}
 		}
 		
@@ -192,6 +1028,30 @@ namespace FProject
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
+		}
+		
+		private void attach_RItemsGroups(RItemsGroup entity)
+		{
+			this.SendPropertyChanging();
+			entity.TItem = this;
+		}
+		
+		private void detach_RItemsGroups(RItemsGroup entity)
+		{
+			this.SendPropertyChanging();
+			entity.TItem = null;
+		}
+		
+		private void attach_RParentProperties(RParentProperty entity)
+		{
+			this.SendPropertyChanging();
+			entity.TItem = this;
+		}
+		
+		private void detach_RParentProperties(RParentProperty entity)
+		{
+			this.SendPropertyChanging();
+			entity.TItem = null;
 		}
 	}
 }

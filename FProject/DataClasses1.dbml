@@ -1,17 +1,63 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="DBTest" Class="DataClasses1DataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
   <Connection Mode="AppSettings" ConnectionString="Data Source=FUJITSU\WINCC;Initial Catalog=DBTest;Integrated Security=True" SettingsObjectName="FProject.Properties.Settings" SettingsPropertyName="DBTestConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.RItemsGroups" Member="RItemsGroups">
+    <Type Name="RItemsGroup">
+      <Column Name="id" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Item_id" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="Group_id" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Association Name="TGroup_RItemsGroup" Member="TGroup" ThisKey="Group_id" OtherKey="id" Type="TGroup" IsForeignKey="true" />
+      <Association Name="TItem_RItemsGroup" Member="TItem" ThisKey="Item_id" OtherKey="id" Type="TItem" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TProperties" Member="TProperties">
+    <Type Name="TProperty">
+      <Column Name="id" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="TProperty_RParentProperty" Member="RParentProperties" ThisKey="id" OtherKey="Proper_id" Type="RParentProperty" />
+    </Type>
+  </Table>
+  <Table Name="dbo.RParentProperties" Member="RParentProperties">
+    <Type Name="RParentProperty">
+      <Column Name="id" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Parent_id" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="Proper_id" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="val" Type="System.String" DbType="NChar(10)" CanBeNull="true" />
+      <Association Name="TProperty_RParentProperty" Member="TProperty" ThisKey="Proper_id" OtherKey="id" Type="TProperty" IsForeignKey="true" />
+      <Association Name="TGroup_RParentProperty" Member="TGroup" ThisKey="Parent_id" OtherKey="id" Type="TGroup" IsForeignKey="true" />
+      <Association Name="TItem_RParentProperty" Member="TItem" ThisKey="Parent_id" OtherKey="id" Type="TItem" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TGroups" Member="TGroups">
+    <Type Name="TGroup">
+      <Column Name="id" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="parent_id" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Association Name="TGroup_RItemsGroup" Member="RItemsGroups" ThisKey="id" OtherKey="Group_id" Type="RItemsGroup" />
+      <Association Name="TGroup_RParentProperty" Member="RParentProperties" ThisKey="id" OtherKey="Parent_id" Type="RParentProperty" />
+    </Type>
+  </Table>
   <Table Name="dbo.TItems" Member="TItems">
     <Type Name="TItem">
       <Column Name="id" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="name" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="temp" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
       <Column Name="dt" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="TItem_RItemsGroup" Member="RItemsGroups" ThisKey="id" OtherKey="Item_id" Type="RItemsGroup" />
+      <Association Name="TItem_RParentProperty" Member="RParentProperties" ThisKey="id" OtherKey="Parent_id" Type="RParentProperty" />
     </Type>
     <InsertFunction FunctionId="FunctionId1">
       <Argument Parameter="name" Member="name" />
     </InsertFunction>
+    <DeleteFunction FunctionId="FunctionId2">
+      <Argument Parameter="id" Member="id" />
+    </DeleteFunction>
   </Table>
   <Function Id="FunctionId1" Name="dbo.TItemsInsert" Method="TItemsInsert">
-    <Parameter Name="name" Type="System.String" DbType="VarChar(50)" />
+    <Parameter Name="name" Type="System.String" DbType="NVarChar(50)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Id="FunctionId2" Name="dbo.TItemsDelete" Method="TItemsDelete">
+    <Parameter Name="id" Type="System.Guid" DbType="UniqueIdentifier" />
     <Return Type="System.Int32" />
   </Function>
 </Database>

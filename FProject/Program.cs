@@ -18,6 +18,7 @@ namespace FProject
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
         }
+
     }
 
     
